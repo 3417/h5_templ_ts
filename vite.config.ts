@@ -1,11 +1,17 @@
-import { build,defineConfig,loadEnv } from 'vite'
+import { build, defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+import styleImport, { VantResolve } from 'vite-plugin-style-import';
 // https://vitejs.dev/config/
-export default ({ mode })=> {
+export default ({ mode }) => {
   // loadEnv(mode, process.cwd())
   return defineConfig({
-    plugins: [vue()],
+    plugins: [
+      vue(),
+      styleImport({
+        resolves: [VantResolve()],
+      }),
+    ],
     base: "./",
     server: {
       host: '0.0.0.0',
