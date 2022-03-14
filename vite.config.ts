@@ -16,7 +16,14 @@ export default ({ mode }) => {
     server: {
       host: '0.0.0.0',
       port: 9527,
-      open: true
+      open: true,
+      proxy:{
+        '/api':{
+          target:'https://www.baidu.com',
+          changeOrigin:true,
+          rewrite:(path)=>path.replace('/^\/api/','')
+        }
+      }
     },
     resolve: {
       extensions: ['.js', '.vue', '.json', '.ts', '.tsx'],

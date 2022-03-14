@@ -1,13 +1,28 @@
-import axios,{AxiosRequestConfig} from 'axios';
+import axios,{AxiosRequestConfig, Method} from 'axios';
 import { Toast } from 'vant';
 const baseUrl = import.meta.env.VITE_APP_BASE_API;
-// interface  pendingType {
-//     url:string,
-//     params?:any,
-//     data?:any,
-//     baseURL?:string,
-//     oConfig?:object
-// }
+interface  pendingType {
+    url:string;
+    params?:any;
+    data?:any;
+    baseURL?:string;
+    oConfig?:object;
+    method?:Method;
+    cancel:any;
+}
+let pending:Array<pendingType> = []
+const cancelToken = axios.CancelToken;
+const removePending = (config:AxiosRequestConfig)=>{
+    for(let p in pending){
+        const item:number = +p;
+        const list:pendingType = pending[p];
+        const isPend = list.url === config.url && list.method === config.method && JSON.stringify(list.params) === JSON.stringify(config.params)&& JSON.stringify(list.data) === JSON.stringify(config.data)
+        if(isPend){
+            list.cancel("操作太频繁，请稍后再试")
+            pending.splice(item,1);
+        }
+    }
+}
 // 封装axios请求
 class httpRequest {
     baseUrl: string
@@ -28,6 +43,10 @@ class httpRequest {
         instance.interceptors.request.use((config:any) => {
             config.headers['RefererRedirectURL'] = location.href;
             config.headers['RefererRedirect'] = '<Name>'
+            removePending(config);
+            config.cancelToken = new cancelToken((c:any)=>{
+                pending.push({url:config.url,method:config.method,params:config.params,data:config.data,cancel:c})
+            })
             return config
         },(error:any) => {
             return Promise.reject(error)
