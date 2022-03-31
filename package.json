@@ -1,7 +1,8 @@
 {
-  "name": "h5",
+  "name": "{{name}}",
   "private": true,
-  "version": "0.0.0",
+  "version": "{{version}}",
+  "description": "{{description}}",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
