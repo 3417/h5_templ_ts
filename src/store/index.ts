@@ -3,12 +3,12 @@ import { createStore } from 'vuex';
 const store = createStore({
     state() {
         return {
-            voto:{}
+            isLoading:false
         }
     },
     mutations: {
-        SET_VOTO(state:any,data) {
-            state.voto = data;
+        SET_LOADING(state:any,data) {
+            state.isLoading = data;
         }
     }
 })

@@ -36,7 +36,7 @@ export default ({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "./src/assets/style/common.scss";`
+          // additionalData: `@import "./src/assets/style/common.scss";`
         }
       }
     },
