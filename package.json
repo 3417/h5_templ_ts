@@ -12,11 +12,11 @@
     "@types/node": "17.0.18",
     "axios": "^0.26.1",
     "esbuild-windows-64": "^0.14.25",
+    "pinia": "^2.0.13",
     "sass": "^1.49.9",
     "vant": "^3.4.5",
     "vue": "^3.2.25",
-    "vue-router": "4",
-    "vuex": "^4.0.2"
+    "vue-router": "4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.2.0",

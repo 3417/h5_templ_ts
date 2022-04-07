@@ -10,3 +10,7 @@ declare module '*.vue' {
 interface ImportMetaEnv{ 
   VITE_APP_BASE_API:string
 }
+
+declare module '@/*'
+declare module '@as/*'
+declare module '@cp/*'
