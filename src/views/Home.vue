@@ -1,6 +1,5 @@
 <template>
-  <h2>Vue3.0</h2>
-  <button @click="onPopup">123</button>
+  <h2>Vue3.0+Vite+Vant3</h2>
 </template>
 
 <script lang="ts" setup>
@@ -14,4 +13,7 @@ const onPopup = ()=>{
 </script>
 
 <style lang="scss" scoped>
+h2{
+  text-align: center;
+}
 </style>
