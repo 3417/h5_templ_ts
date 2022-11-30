@@ -2,7 +2,7 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 // console.log('获取不同状态的加载==>',import.meta.env)
-import { computed, ref } from 'vue';
+import { computed, onMounted, proxyRefs, ref } from 'vue';
 import {useStore} from '@/store';
 const store = useStore();
 const show = computed(()=>store.isLoading); 
@@ -10,6 +10,10 @@ const show = computed(()=>store.isLoading);
 // setTimeout(() => {
 //     store.SET_LOADING(true)
 // }, 1000);
+
+onMounted(()=>{
+  
+})
 </script>
 
 <template>

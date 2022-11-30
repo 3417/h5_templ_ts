@@ -1,19 +1,42 @@
-import { build, defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
-import styleImport, { VantResolve } from 'vite-plugin-style-import';
+import { resolve } from 'path';
+import DefineOptions from 'unplugin-vue-define-options/vite';
+import Components from 'unplugin-vue-components/vite';
+import { VantResolver } from 'unplugin-vue-components/resolvers';
 import postcsspxtoviewport from 'postcss-px-to-viewport'
+import AutoImport from 'unplugin-auto-import/vite'
 // https://vitejs.dev/config/
+
+// 自动引入
+const AutoImportPlugins = AutoImport({
+  include: [
+    /\.[tj]sx?$/,
+    /\.vue$/,
+    /\.vue\?vue/,
+    /\.md$/,
+  ],// global imports to register
+  imports: [
+    // 插件预设支持导入的api
+    'vue',
+    'vue-router',
+    'pinia'
+    // 自定义导入的api
+  ],
+  dts:"src/auto-import.d.ts" //生成auto-import.d.ts 全局声明
+})
 export default ({ mode }) => {
-  // loadEnv(mode, process.cwd())
+  const env = loadEnv(mode, process.cwd())
   return defineConfig({
     plugins: [
       vue(),
-      styleImport({
-        resolves: [VantResolve()],
+      Components({
+        resolvers: [VantResolver()],
       }),
+      DefineOptions(),
+      AutoImportPlugins
     ],
-    base: "./",
+    base: env.VITE_PUBLIC_PATH,
     server: {
       host: '0.0.0.0',
       port: 9527,
@@ -27,7 +50,7 @@ export default ({ mode }) => {
       }
     },
     resolve: {
-      extensions: ['.js', '.vue', '.json', '.ts', '.tsx'],
+      extensions: ['.js', '.vue', '.json', '.ts', '.tsx','.mjs'],
       alias: {
         '@': resolve(__dirname, './src'),
         '@as': resolve(__dirname, './src/assets'),
@@ -58,7 +81,7 @@ export default ({ mode }) => {
           }),
           postcsspxtoviewport({
             unitToConvert: 'px', // 要转化的单位
-            viewportWidth: 750, // UI设计稿的宽度
+            viewportWidth: 375, // UI设计稿的宽度
             unitPrecision: 3, // 转换后的精度，即小数点位数
             propList: ['*'], // 指定转换的css属性的单位，*代表全部css属性的单位都进行转换
             viewportUnit: 'vw', // 指定需要转换成的视窗单位，默认vw
