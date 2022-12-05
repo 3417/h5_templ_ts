@@ -1,18 +1,17 @@
 <template>
   <h2>Vue3+Vite+Vant4+Typescript</h2>
-  <van-button type="primary" @click="handleOnClick">主要按钮</van-button>
+  <van-button type="primary" @click="onPopup">主要按钮</van-button>
 </template>
 
 <script lang="ts" setup>
 import { showLoadingToast } from 'vant';
 const $http: any = inject("$http");
-const $popup: any = inject("$popup");
 const { proxy }: any = getCurrentInstance();
 defineOptions({
   name: "home"
 })
 const onPopup = () => {
-  $popup().then().catch();
+  proxy.vshow3();
 }
 
 const handleOnClick = () => {

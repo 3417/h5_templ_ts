@@ -1,10 +1,10 @@
-import $popup from "../components/mv_popup/index";
-const provideCpm:any = {
-    $popup
+// import vshow3 from "../components/layer/index";
+const provideCpms:any = {
+    // vshow3
 }
 
 export default (app:any) =>{
-    Object.keys(provideCpm).forEach(cps=>{
-        app.provide(cps,provideCpm[cps])
+    Object.keys(provideCpms).forEach(cps=>{
+        app.provide(cps,provideCpms[cps])
     })
 }
