@@ -7,8 +7,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Layer: typeof import('./src/components/layer/index.vue')['default']
-    Mv_popup: typeof import('./src/components/mv_popup/index.vue')['default']
     Popupcpm: typeof import('./src/components/layer/popupcpm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
