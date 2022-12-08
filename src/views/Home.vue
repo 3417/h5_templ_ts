@@ -1,131 +1,47 @@
 <template>
-  <button class="btn-26"><span>Button</span></button>
+  <div class="home">
+    <div class="times"> 
+      <h3>{{ msg }}</h3>
+      <p>{{ formatTime(times) }}</p>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { showLoadingToast } from 'vant';
-const $http: any = inject("$http");
+import dayjs from 'dayjs';
 const { proxy }: any = getCurrentInstance();
+const msg = ref("Hello Vue3.0");
+const times:any = ref("");
+const getDateTimes = () => {
+  times.value = new Date();
+  setTimeout(() => {
+    getDateTimes();
+  }, 1000);
+}
 defineOptions({
   name: "home"
 })
-const onPopup = () => {
-  proxy.vshow3();
-}
 
-const handleOnClick = () => {
-  showLoadingToast({
-    message: '加载中...',
-    forbidClick: true,
-  })
+const formatTime = (v: string | any): string => {
+  return v ? dayjs(v).format("YYYY年MM月DD日 HH时mm分ss秒") : '--'
 }
 
 onMounted(() => {
   console.log('当前的this指向', proxy);
+  getDateTimes();
+  proxy.vshow3()
 })
 </script>
 
 <style lang="scss" scoped>
-.btn-26,
-.btn-26 *,
-.btn-26 :after,
-.btn-26 :before,
-.btn-26:after,
-.btn-26:before {
-  border: 0 solid;
-  box-sizing: border-box;
-}
-
-.btn-26 {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-appearance: button;
-  background-color: #000;
-  background-image: none;
-  color: #fff;
-  cursor: pointer;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
-    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-  font-size: 100%;
-  font-weight: 900;
-  line-height: 1.5;
-  margin: 0;
-  -webkit-mask-image: -webkit-radial-gradient(#000, #2b2b16);
-  padding: 0;
-  text-transform: uppercase;
-}
-
-.btn-26:disabled {
-  cursor: default;
-}
-
-.btn-26:-moz-focusring {
-  outline: auto;
-}
-
-.btn-26 svg {
-  display: block;
-  vertical-align: middle;
-}
-
-.btn-26 [hidden] {
-  display: none;
-}
-
-.btn-26 {
-  background: none;
-  -webkit-mask-image: none;
-  padding: 1rem 3rem;
-  position: relative;
-}
-
-.btn-26 span {
-  mix-blend-mode: difference;
-}
-
-.btn-26:after,
-.btn-26:before {
-  --progress: 0%;
-  background: #2b2b16;
-  -webkit-clip-path: polygon(0 50%,
-      var(--progress) 0,
-      100% 0,
-      calc(100% - var(--progress)) 50%,
-      100% 100%,
-      var(--progress) 100%);
-  clip-path: polygon(0 50%,
-      var(--progress) 0,
-      100% 0,
-      calc(100% - var(--progress)) 50%,
-      100% 100%,
-      var(--progress) 100%);
-  content: "";
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: height 0.4s, transform 0.4s, -webkit-clip-path 0.4s 0.1s;
-  transition: height 0.4s, transform 0.4s, clip-path 0.4s 0.1s;
-  transition: height 0.4s, transform 0.4s, clip-path 0.4s 0.1s,
-    -webkit-clip-path 0.4s 0.1s;
-  width: 100%;
-  z-index: -1;
-}
-
-.btn-26:after {
-  transform: rotate(180deg) translateY(50%);
-}
-
-.btn-26:hover:before {
-  --progress: 50%;
-  top: 50%;
-  transform: translateY(-50%) translateX(35%);
-}
-
-.btn-26:hover:after {
-  --progress: 50%;
-  top: 50%;
-  transform: rotate(180deg) translateY(50%) translateX(35%);
+.times {
+  background: linear-gradient(to right, #c20fc2, #e0f009);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-align: center;
+  font-size: 10vw;
+  p{
+    font-size:6vw;
+  }
 }
 </style>

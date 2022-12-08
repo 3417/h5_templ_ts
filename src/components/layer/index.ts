@@ -1,13 +1,21 @@
-import { createVNode, render, defineComponent } from 'vue';
+import { createVNode, render} from 'vue';
 import popupCpm from './popupcpm.vue';
 let container = document.body;
-const componentConstructor = defineComponent(popupCpm);
+const componentConstructor = popupCpm;
+interface vshowProps {
+    hasType?:number|string,
+    maskBgColor?:string,
+    rData?:object|any,
+    isOwnDestory?:boolean,
+    onCancel?:Function,
+    onSuccess?:Function,
+}
 const destory = () => {
     setTimeout(() => {
         render(null, container);
     }, 180);
 }
-const vshow3 = (ops:any) => {
+const vshow3 = (ops:vshowProps) => {
     // 获取传入的值
     if (container.querySelector('.cpm-mask')) {
         return;

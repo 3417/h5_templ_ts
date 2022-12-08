@@ -1,13 +1,11 @@
 <template>
-  <div class="cpm-mask" :style="{ backgroundColor: props.maskBgColor }">
+  <div class="cpm-mask" :style="{ backgroundColor: maskBgColor }">
     <div class="cpm_popup cpm_popup_in" :class="{ 'cpm_popup_out': !popupShow }" v-fixed>
-      <component :is="componentTag" v-bind="$attrs" :rData="props.rData" @onSuccess="onSuccess" @onCancel="onCancel" />
+      <component :is="componentTag" v-bind="$attrs" :rData="rData" @onSuccess="onTSuccess" @onCancel="onTCancel" />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { nextTick, ref } from 'vue';
-import config from './config';
 /**
  * 1.使用方法
  * vshow3(String/Object)  //预留了String类型，目前未使用
@@ -36,38 +34,38 @@ import config from './config';
  * 1.各组件按照vue的$emit方法调用onSuccess，onCancel方法 
  * 2.可根据不用的业务需求传入自定义的参数判断执行不用的逻辑
  * */
+import config from './config';
 const popupShow = ref(false);
 const componentTag:any = ref("");
 const destory:any = ref(null);
 defineOptions({
   name: "popupCpm"
 })
-let props = defineProps({
-  hasType: {
-    type: Number,
-    default: 0
-  },
-  maskBgColor: {
-    type: String,
-    default: "rgba(0,0,0,.85)"
-  },
-  rData: {
-    type: Object,
-    default: () => { }
-  },
-  isOwnDestory: {
-    type: Boolean,
-    default: false
-  },
-  onCancel: {
-    type: Function,
-    default: () => { }
-  },
-  onSuccess: {
-    type: Function,
-    default: () => { }
-  }
+interface Props {
+  hasType?:number|string,
+  maskBgColor?:string,
+  rData?:object|any,
+  isOwnDestory?:boolean,
+  onCancel?:Function,
+  onSuccess?:Function,
+}
+let props = withDefaults(defineProps<Props>(),{
+  hasType: 0,
+  maskBgColor:"rgba(0,0,0,.85)",
+  rData: {},
+  isOwnDestory: false,
+  onCancel: ()=>{},
+  onSuccess: ()=>{}
 })
+
+const {
+  hasType,
+  maskBgColor,
+  rData,
+  isOwnDestory,
+  onCancel,
+  onSuccess
+} = props;
 
 const vFixed = {
   mounted() {
@@ -90,7 +88,7 @@ const vFixed = {
 nextTick(() => {
   componentTag.value = {
     ...config
-  }[props.hasType]
+  }[hasType]
 
 })
 
@@ -101,13 +99,12 @@ const _destory = ()=>{
 
 }
 
-const onCancel = (v:any) => {
-  console.log(props)
-  if(props.isOwnDestory) props.onCancel(v,_destory)
+const onTCancel = (v:any) => {
+  if(isOwnDestory) onCancel(v,_destory)
   else _destory()
 }
-const onSuccess = (v:any) => {
-  if(props.isOwnDestory) props.onSuccess(v,_destory)
+const onTSuccess = (v:any) => {
+  if(isOwnDestory) onSuccess(v,_destory)
   else _destory()
 }
 

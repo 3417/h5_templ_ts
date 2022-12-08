@@ -17,3 +17,9 @@ interface ImportMeta{
 declare module '@/*'
 declare module '@as/*'
 declare module '@cp/*'
+
+
+declare interface Window{
+  VConsole:any,
+  eruda:any
+}

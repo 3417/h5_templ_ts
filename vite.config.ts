@@ -56,7 +56,7 @@ export default ({ mode }) => {
       open: true,
       proxy: {
         '/api': {
-          target: 'https://www.baidu.com',
+          target: 'http://127.0.0.1:9527',
           changeOrigin: true,
           rewrite: (path) => path.replace('/^\/api/', '')
         }
@@ -92,7 +92,22 @@ export default ({ mode }) => {
       }
     },
     build: {
-      outDir: 'dist'
+      outDir: 'dist',
+      sourcemap:false,
+      minify:"terser",
+      terserOptions:{
+        compress:{
+          drop_console:true,
+          drop_debugger:true
+        }
+      },
+      rollupOptions:{
+        output:{
+          chunkFileNames:'js/[name]-[hash].js',
+          entryFileNames:'js/[name]-[hash].js',
+          assetFileNames:'[ext]/[name]-[hash].[ext]'
+        }
+      }
     }
   })
 }
