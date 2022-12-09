@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 const emit = defineEmits(["onCancel"]);
-const msg = ref("Test");
+const msg = ref("活动规则");
 </script>
 <style lang="scss" scoped>
 .test {
@@ -25,8 +25,10 @@ const msg = ref("Test");
     color: #fff;
     margin: 15px auto 0;
     user-select: none;
-    font-size: 30px;
+    font-size: 22px;
     cursor: pointer;
     text-align: center;
+    border: 2px solid #fff;
+    border-radius: 50%;
 }
 </style>

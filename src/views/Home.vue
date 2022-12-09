@@ -29,7 +29,6 @@ const formatTime = (v: string | any): string => {
 onMounted(() => {
   console.log('当前的this指向', proxy);
   getDateTimes();
-  proxy.vshow3()
 })
 </script>
 
