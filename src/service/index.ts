@@ -1,6 +1,6 @@
 import axios,{AxiosRequestConfig, Method} from 'axios';
-import { Toast } from 'vant';
 const baseUrl = import.meta.env.VITE_APP_BASE_API;
+import {showToast} from 'vant';
 interface  pendingType {
     url:string;
     params?:any;
@@ -59,11 +59,11 @@ class httpRequest {
             }else if(rCode === 0){
                 return resp.data;
             }else {
-                Toast(resp.data.msg);
+                showToast (resp.data.msg);
                 return Promise.reject(resp.data);
             } 
         },(error:any) => {
-            Toast(error.toString());
+            showToast (error.toString());
             return Promise.reject(error);
         })
     }
