@@ -1,28 +1,35 @@
 import {createRouter,createWebHashHistory,createWebHistory} from 'vue-router';
 import Home from '../views/Home.vue';
 const router = createRouter({
-    history:createWebHistory(),
+    history:createWebHashHistory(),
     routes:[
         {
             path:'/',
+            redirect:"/home"
+        },
+        {
+            path:'/home',
             component:Home,
             meta:{
                 title:"首页"
             }
         },
-        // {
-        //     path:'/xxx',
-        //     name:'xxxx',
-        //     component:()=>import('../xxxxxx'),
-        //     meta:{
-        //         title:"xxxx"
-        //     },
-        // }
+        {
+            path:'/About',
+            name:'about',
+            component:()=>import('@/views/About.vue'),
+            meta:{
+                title:"关于"
+            },
+        }
     ]
 })
-
-// FIXME:路由拦截器
-
-
+// 路由拦截器
+router.beforeEach((to,from,next)=>{
+    if(typeof to.meta.title === 'string'){
+        document.title = to.meta.title;
+    }
+    next()
+})
 export default router;
 

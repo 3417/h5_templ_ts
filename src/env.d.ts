@@ -21,5 +21,5 @@ declare module '@cp/*'
 
 declare interface Window{
   VConsole:any,
-  eruda:any
+  eruda:any,
 }
