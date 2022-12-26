@@ -15,7 +15,7 @@ const destory = () => {
         render(null, container);
     }, 180);
 }
-const vshow3 = (ops:vshowProps) => {
+const vspop = (ops:vshowProps) => {
     // 获取传入的值
     if (container.querySelector('.cpm-mask')) {
         return;
@@ -34,9 +34,9 @@ const vshow3 = (ops:vshowProps) => {
     const vm:any = createVNode(popupCpm, iProps);
     render(vm, container);
     const $instance = vm.component.exposed;
-    return $instance.vshow3(destory);
+    return $instance.vspop(destory);
 }
 
 export default (app:any) => {
-    app.config.globalProperties.vshow3 = vshow3;
+    app.config.globalProperties.vspop = vspop;
 };

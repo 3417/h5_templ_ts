@@ -41,8 +41,8 @@ class httpRequest {
     }
     interceptors(instance: any, url: string) {
         instance.interceptors.request.use((config:any) => {
-            config.headers['RefererRedirectURL'] = location.href;
-            config.headers['RefererRedirect'] = '<Name>'
+            // config.headers['RefererRedirectURL'] = location.href;
+            // config.headers['RefererRedirect'] = '<Name>'  //业务需要代码
             removePending(config);
             config.cancelToken = new cancelToken((c:any)=>{
                 pending.push({url:config.url,method:config.method,params:config.params,data:config.data,cancel:c})

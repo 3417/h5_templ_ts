@@ -8,7 +8,7 @@
 <script lang="ts" setup>
 /**
  * 1.使用方法
- * vshow3(String/Object)  //预留了String类型，目前未使用
+ * vspop(String/Object)  //预留了String类型，目前未使用
  * 传入的需要页面展示的数据放在rData对象中，hasType为不同类型弹窗标识
  * 2.接受参数
  * 接受参数：String,Object
@@ -21,8 +21,8 @@
  *    6.isOwnDestory:阻止弹窗自动销毁(如需要自定义何时销毁弹窗请将改字段置为true) 
  * 调用事例:
  *  const instance = getCurrentInstance();
-  * const {vshow3} = instance.appContext.config.globalProperties;
-  * vshow3({
+  * const {vspop} = instance.appContext.config.globalProperties;
+  * vspop({
   *    hastype:<type>,
   *    rData:<object>,
   *    isOwnDestory:<boolean>
@@ -108,7 +108,7 @@ const onTSuccess = (v:any) => {
   else _destory()
 }
 
-const vshow3 = (fn:any) => {
+const vspop = (fn:any) => {
   popupShow.value = true;
   destory.value = fn;
 }
@@ -116,7 +116,7 @@ const vshow3 = (fn:any) => {
 defineExpose({
   onCancel,
   onSuccess,
-  vshow3
+  vspop
 })
 
 
@@ -161,6 +161,7 @@ defineExpose({
   }
 }
 
+// 退出动画效果
 @keyframes fade-out {
   0% {
     opacity: 1;
