@@ -12,7 +12,6 @@ const show = computed(()=>store.isLoading);
 // }, 1000);
 
 onMounted(()=>{
-  
 })
 </script>
 

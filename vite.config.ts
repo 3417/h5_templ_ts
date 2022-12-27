@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path';
+import { fileURLToPath, URL } from 'node:url';
 import DefineOptions from 'unplugin-vue-define-options/vite';
 import Components from 'unplugin-vue-components/vite';
 import { VantResolver } from 'unplugin-vue-components/resolvers';
@@ -65,9 +66,9 @@ export default ({ mode }) => {
     resolve: {
       extensions: ['.js', '.vue', '.json', '.ts', '.tsx','.mjs'],
       alias: {
-        '@': resolve(__dirname, './src'),
         '@as': resolve(__dirname, './src/assets'),
         '@cp': resolve(__dirname, './src/components'),
+        '@':fileURLToPath(new URL('./src',import.meta.url))
       }
     },
     css: {
