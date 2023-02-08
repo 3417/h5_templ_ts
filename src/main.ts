@@ -5,6 +5,7 @@ import request from './service';
 import plugins from './plugins/index';
 import vspop from './components/layer/index';
 import directivePlugins from './utils/directive';
+import './utils/weChatFontSize';
 import './assets/style/common.scss'
 const app = createApp(App);
 app.config.globalProperties.$request = request;  //挂载到全局this上

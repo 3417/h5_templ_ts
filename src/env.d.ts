@@ -22,4 +22,5 @@ declare module '@cp/*'
 declare interface Window{
   VConsole:any,
   eruda:any,
+  WeixinJSBridge:any
 }
