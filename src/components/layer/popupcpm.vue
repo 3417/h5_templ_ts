@@ -1,7 +1,7 @@
 <template>
   <div class="cpm-mask" :style="{ backgroundColor: maskBgColor }">
     <div class="cpm_popup cpm_popup_in" :class="{ 'cpm_popup_out': !popupShow }" v-fixed>
-      <component :is="componentTag" v-bind="$attrs" :rData="rData" @onSuccess="onTSuccess" @onCancel="onTCancel" />
+      <component :is="componenTag" v-bind="$attrs" :rData="rData" @onSuccess="onSuccess" @onCancel="onCancel" />
     </div>
   </div>
 </template>
@@ -9,11 +9,11 @@
 /**
  * 1.使用方法
  * vshow3(String/Object)  //预留了String类型，目前未使用
- * 传入的需要页面展示的数据放在rData对象中，hasType为不同类型弹窗标识
+ * 传入的需要页面展示的数据放在rData对象中，componenTag为不同类型弹窗标识
  * 2.接受参数
  * 接受参数：String,Object
  * Object:
- *    1.hasType:各组件标识
+ *    1.componenTag:组件
  *    2.maskBgColor:蒙层背景色（已默认可不传）
  *    3.rData:相关数据信息
  *    4.onSuccess:成功回调
@@ -23,7 +23,7 @@
  *  const instance = getCurrentInstance();
   * const {vshow3} = instance.appContext.config.globalProperties;
   * vshow3({
-  *    hastype:<type>,
+  *    componenTag:<tag>,
   *    rData:<object>,
   *    isOwnDestory:<boolean>
   *    onSuccess:<fn(参数)>,
@@ -34,38 +34,32 @@
  * 1.各组件按照vue的$emit方法调用onSuccess，onCancel方法 
  * 2.可根据不用的业务需求传入自定义的参数判断执行不用的逻辑
  * */
-import config from './config';
 const popupShow = ref(false);
-const componentTag:any = ref("");
-const destory:any = ref(null);
+const promise:any = ref({});
+const callback = reactive({
+  resolve:(v:any)=>{},
+  reject:(v:any)=>{}
+})
 defineOptions({
   name: "popupCpm"
 })
+
 interface Props {
-  hasType?:number|string,
+  componenTag?:any,
   maskBgColor?:string,
-  rData?:object|any,
+  rData?:any,
   isOwnDestory?:boolean,
   onCancel?:Function,
   onSuccess?:Function,
 }
-let props = withDefaults(defineProps<Props>(),{
-  hasType: 0,
+withDefaults(defineProps<Props>(),{
+  componenTag:{},
   maskBgColor:"rgba(0,0,0,.85)",
-  rData: {},
+  rData:{},
   isOwnDestory: false,
   onCancel: ()=>{},
   onSuccess: ()=>{}
 })
-
-const {
-  hasType,
-  maskBgColor,
-  rData,
-  isOwnDestory,
-  onCancel,
-  onSuccess
-} = props;
 
 const vFixed = {
   mounted() {
@@ -84,39 +78,26 @@ const vFixed = {
     body.style.overflow = "initial";
   }
 }
-
-nextTick(() => {
-  componentTag.value = {
-    ...config
-  }[hasType]
-
-})
-
-// 销毁该弹窗主题
-const _destory = ()=>{
-  popupShow.value = false;
-  destory.value();
-
+const onCancel=(v:any)=>{
+  callback.reject(v);
 }
-
-const onTCancel = (v:any) => {
-  if(isOwnDestory) onCancel(v,_destory)
-  else _destory()
+const onSuccess=(v:any)=>{
+  callback.resolve(v);
 }
-const onTSuccess = (v:any) => {
-  if(isOwnDestory) onSuccess(v,_destory)
-  else _destory()
-}
-
-const vshow3 = (fn:any) => {
+const vshow3 = () => {
   popupShow.value = true;
-  destory.value = fn;
+  promise.value = new Promise((resolve:any,reject:any)=>{
+    callback.resolve = resolve;
+    callback.reject = reject;
+  })
+  return promise.value;
 }
 
 defineExpose({
-  onCancel,
+  vshow3,
   onSuccess,
-  vshow3
+  onCancel,
+  popupShow
 })
 
 

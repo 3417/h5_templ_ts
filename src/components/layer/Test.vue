@@ -1,11 +1,12 @@
 <template>
-    <div class="test">{{ msg }}</div>
-    <div class="close" @click="emit('onCancel')">X</div>
+    <div class="test">
+        {{ $attrs?.rData?.msg }}
+        <button @click="emit('onSuccess','success')">Success</button>
+    </div>
+    <div class="close" @click="emit('onCancel','fail')">X</div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue"
-const emit = defineEmits(["onCancel"]);
-const msg = ref("活动规则");
+const emit = defineEmits(["onCancel","onSuccess"]);
 </script>
 <style lang="scss" scoped>
 .test {

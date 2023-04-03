@@ -1,28 +1,39 @@
 import {createRouter,createWebHashHistory,createWebHistory} from 'vue-router';
-import Home from '../views/Home.vue';
+
+// 批量加载
+const routesModules = import.meta.glob("./modules/*.ts",{import:'default',eager:true});  //eager 必须设置为true
+const otherRoutes = [];
+for(let key in (routesModules)){
+    otherRoutes.push(...routesModules[key]);
+    // let name = key.replace(/^\.\/modules\/(.*)\.\w+$/, '$1');
+    // routesModules[key]().then(mod=>{
+    //     otherRoutes.push(...mod);
+    // })
+}
+const routes = [
+    {
+        path:"/",
+        redirect:'/home'
+    },
+    ...otherRoutes
+];
+
+// console.log(Object.entries(routesModules))
 const router = createRouter({
     history:createWebHistory(),
-    routes:[
-        {
-            path:'/',
-            component:Home,
-            meta:{
-                title:"首页"
-            }
-        },
-        // {
-        //     path:'/xxx',
-        //     name:'xxxx',
-        //     component:()=>import('../xxxxxx'),
-        //     meta:{
-        //         title:"xxxx"
-        //     },
-        // }
-    ]
+    routes,
+    scrollBehavior:(to,from,savedPosition)=>{
+        return {x:0,y:0}
+    }
 })
 
-// FIXME:路由拦截器
-
+// 路由前置拦截器
+router.beforeEach((to,from,next)=>{
+    if(to.meta.title){
+        document.title = to.meta.title;
+    }
+    next();
+})
 
 export default router;
 
