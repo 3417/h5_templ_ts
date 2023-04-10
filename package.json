@@ -1,8 +1,8 @@
 {
-  "name": "{{name}}",
+  "name": "demos",
   "private": true,
-  "version": "{{version}}",
-  "description": "{{description}}",
+  "version": "v1.0.0",
+  "description": "描述信息",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
     "consola": "^2.15.3",
-    "postcss-px-to-viewport": "^1.1.1",
+    "postcss-px-to-viewport-8-plugin": "^1.2.2",
     "typescript": "^5.0.2",
     "unplugin-vue-components": "^0.24.1",
     "vite": "^4.2.1",
