@@ -6,34 +6,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-/**
- * 1.使用方法
- * vshow3(String/Object)  //预留了String类型，目前未使用
- * 传入的需要页面展示的数据放在rData对象中，componenTag为不同类型弹窗标识
- * 2.接受参数
- * 接受参数：String,Object
- * Object:
- *    1.componenTag:组件
- *    2.maskBgColor:蒙层背景色（已默认可不传）
- *    3.rData:相关数据信息
- *    4.onSuccess:成功回调
- *    5.onSuccess:关闭回调
- *    6.isOwnDestory:阻止弹窗自动销毁(如需要自定义何时销毁弹窗请将改字段置为true) 
- * 调用事例:
- *  const instance = getCurrentInstance();
-  * const {vshow3} = instance.appContext.config.globalProperties;
-  * vshow3({
-  *    componenTag:<tag>,
-  *    rData:<object>,
-  *    isOwnDestory:<boolean>
-  *    onSuccess:<fn(参数)>,
-  *    onCancel:<fn(参数)>
-  * })
- * 
- * tip:
- * 1.各组件按照vue的$emit方法调用onSuccess，onCancel方法 
- * 2.可根据不用的业务需求传入自定义的参数判断执行不用的逻辑
- * */
 const popupShow = ref(false);
 const promise:any = ref({});
 const callback = reactive({
@@ -48,7 +20,8 @@ interface Props {
   componenTag?:any,
   maskBgColor?:string,
   rData?:any,
-  isOwnDestory?:boolean,
+  isSucDestory?:boolean,
+  isCanDestory?:boolean,
   onCancel?:Function,
   onSuccess?:Function,
 }
@@ -56,7 +29,8 @@ withDefaults(defineProps<Props>(),{
   componenTag:{},
   maskBgColor:"rgba(0,0,0,.85)",
   rData:{},
-  isOwnDestory: false,
+  isSucDestory:false,
+  isCanDestory:false,
   onCancel: ()=>{},
   onSuccess: ()=>{}
 })
