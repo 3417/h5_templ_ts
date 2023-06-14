@@ -100,6 +100,10 @@ export default ({ mode }) => {
       },
       rollupOptions:{
         output:{
+          manualChunks:{
+            // 配置打包的chunkFileName
+            //'name':['xxxx/xxx/xxx','xxx/xxx/xxxx'] 
+          },
           chunkFileNames:'js/[name]-[hash].js',
           entryFileNames:'js/[name]-[hash].js',
           assetFileNames:'[ext]/[name]-[hash].[ext]'
