@@ -105,5 +105,5 @@ const vshow3 = (opts:vshowProps) => {
 }
 
 export default (app:any) => {
-    app.config.globalProperties.vspop = vspop;
+    app.config.globalProperties.vshow3 = vshow3;
 };
