@@ -1,11 +1,11 @@
 const fixed = {
-  inserted() {
+  mounted() {
     let scrollTop =
       document.body.scrollTop || document.documentElement.scrollTop;
     document.body.style.cssText +=
       "position:fixed;overflow:hidden;width:100%;top:-" + scrollTop + "px;";
   },
-  unbind() {
+  unmounted() {
     let body = document.body;
     body.style.position = "";
     let top = body.style.top;
@@ -16,7 +16,7 @@ const fixed = {
 }
 
 const eruda = {
-  inserted(el:any, binding:any, vnode:any) {
+  mounted(el:any, binding:any, vnode:any) {
     const setEruda = () => {
       binding.value--;
       if (window.eruda) { return };
@@ -38,7 +38,7 @@ const eruda = {
 }
 
 const clog = {
-  inserted(el:any, binding:any, vnode:any) {
+  mounted(el:any, binding:any, vnode:any) {
     const setConsole = () => {
       binding.value--;
       if (window.VConsole) { return };
@@ -60,7 +60,7 @@ const clog = {
 }
 // 使用 ：v-debounce="{fn:()=>{<handFn>},event:'click',delay:200}"
 const debounce = {
-  inserted(el:any,binding:any){
+  mounted(el:any,binding:any){
       if(typeof binding.value.fn !== 'function' || !binding.value.event) return
       let delay = 200;
       el.timer = null;
@@ -77,7 +77,7 @@ const debounce = {
       el.addEventListener(binding.value.event,el.handler)
   },
   // 元素卸载的时候清理定时器移除监听事件
-  unbind(el:any,binding:any){
+  unmounted(el:any,binding:any){
       if(el.timer){
           clearTimeout(el.timer);
           el.timer = null;
@@ -87,7 +87,7 @@ const debounce = {
 }
 // 使用 ：v-throttle="{fn:()=>{<handFn>},event:'input',delay:200}"
 const throttle = {
-  inserted(el:any,binding:any){
+  mounted(el:any,binding:any){
       if(typeof binding.value.fn !== 'function' || !binding.value.event) return;
       let delay = 200;
       el.timer = null;
@@ -101,7 +101,7 @@ const throttle = {
       }
       el.addEventListener(binding.value.event,el.handler);
   },
-  unbind(el:any,binding:any){
+  unmounted(el:any,binding:any){
       if(el.timer){
           clearTimeout(el.timer)
       }
@@ -113,15 +113,14 @@ const throttle = {
 const clickOutSide = {
   mounted(el,binding,vnode){
     // 默认要传递binding.value为isShow
-    const bcase:string = binding.value ? binding.value : 'isShow';
     function clickHandler(e){
       if(el.contains(e.target)){
         return false;
       }else{
-        switch(bcase){
-          case 'isShow':
-            vnode.context.isShow ? vnode.context.isShow = false : ''
-            break;
+        if (binding.value) {
+          vnode.context[binding.value] ? vnode.context[binding.value] = false : ''
+        } else {
+          vnode.context.isShow ? vnode.context.isShow = false : ''
         }
       }
     }
@@ -185,6 +184,98 @@ const h5drag = {
   }
 }
 
+// 长按出现调试工具 v-longpress:3000="()=>{}"(eruda调试工具)
+const longpress = {
+  mounted(el, binding, vnode) {
+    const onEruda = () => {
+        if (window.eruda) { return };
+        let head = document.getElementsByTagName('head')[0];
+        let script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.onload = script.onreadystatechange = function () {
+          if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
+            window.eruda && window.eruda.init();
+          }
+        };
+        script.src = '//cdn.jsdelivr.net/npm/eruda';
+        head.appendChild(script);
+    }
+    const handleFn = (e)=>{
+      binding.value(e);
+    }
+    let s = binding.arg * 1 || 3000;
+    if(typeof binding.value !== 'function'){
+      throw 'callback must be function'
+    }
+    el._pressTimer = null;
+    el.style.userSelect = 'none';
+    el._start = (e)=>{
+      let flag1 = e.type === 'mousedown' &&e.button && e.button !== 0;
+      let flag2 = e.type === 'touchstart'&&e.touches &&e.touches.length > 1;
+      if(flag1 || flag2){return}
+
+      if(!el._pressTimer){
+        el._pressTimer = setTimeout(() => {
+          onEruda();
+          handleFn();// 返回一个事件
+        }, s);
+      }
+    }
+
+    el._cancel = (e)=>{
+      if(el._pressTimer){
+        clearTimeout(el._pressTimer);
+        el._pressTimer = null;
+      }
+    }
+
+    el.addEventListener('mousedown',el._start);
+    el.addEventListener('touchstart',el._start);
+    el.addEventListener('click',el._cancel);
+    el.addEventListener('mouseout',el._cancel);
+    el.addEventListener('touchend',el._cancel);
+    el.addEventListener('touchcancel',el._cancel);
+  },
+  unmounted(el, binding) {
+    // 移除计时监听
+    el.removeEventListener('mousedown', el._start)
+    el.removeEventListener('touchstart', el._start)
+    // 移除取消监听
+    el.removeEventListener('click', el._cancel)
+    el.removeEventListener('mouseout', el._cancel)
+    el.removeEventListener('touchend', el._cancel)
+    el.removeEventListener('touchcancel', el._cancel)
+  }
+}
+
+// 倒计时 v-countdown[30]="{fn:<fn>,msg}",组件中的fn方法需要使用promise返回值
+const countdown = {
+  mounted(el, binding, vnode) {
+    console.log(el, binding, vnode);
+    let flag = false, that = vnode.context;  //that为当前组件的this
+    el.onclick = async function () {
+      let getMsg = await binding.value.fn();
+      console.log(getMsg, flag)
+      if (!getMsg || flag) { return };
+      flag = true;
+      let i = binding.arg || 60;  //获取倒计时 时间
+      el.innerHTML = i + 's';
+      vnode.elm.style = 'filter:grayscale(1);pointer-events:none';
+      let t = setInterval(() => {
+        if (i < 1) {
+          clearInterval(t);
+          flag = false;
+          el.innerHTML = binding.value.msg;
+          vnode.elm.style = 'filter:grayscale(0);pointer-events:auto';
+          return;
+        };
+        i--;
+        el.innerHTML = i + 's';
+      }, 1000)
+    }
+  }
+}
+
 const Plugin:any = {
   fixed,
   eruda,
@@ -192,7 +283,9 @@ const Plugin:any = {
   debounce,
   throttle,
   clickOutSide,
-  h5drag
+  h5drag,
+  countdown,
+  longpress
 }
 
 export default (app:any) => {
