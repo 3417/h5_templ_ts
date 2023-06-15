@@ -53,3 +53,5 @@ let scale = window.screen.width / <根据当前设计稿的宽度>  //计算缩�
 1. vue3.0的项目去除了filters  需要自己结合methods方法和computed来实现
 2. vue3.0可支持多个节点，不需要写在一个节点里面了
 3. 其他请参考相关文档
+
+### 注意 当前的模板需要使用node18(含)以上的版本

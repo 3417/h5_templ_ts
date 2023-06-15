@@ -9,6 +9,7 @@
 
 <script lang="ts" setup>
 import dayjs from 'dayjs';
+import Rule from '@/components/layer/Test.vue';
 const { proxy }: any = getCurrentInstance();
 const msg = ref("Hello Vue3.0");
 const times:any = ref("");

@@ -1,6 +1,6 @@
 import axios,{AxiosRequestConfig, Method} from 'axios';
 const baseUrl = import.meta.env.VITE_APP_BASE_API;
-import {showToast} from 'vant';
+import {showToast,showLoadingToast} from 'vant';
 interface  pendingType {
     url:string;
     params?:any;
@@ -10,7 +10,20 @@ interface  pendingType {
     method?:Method;
     cancel:any;
 }
-let pending:Array<pendingType> = []
+let pending:Array<pendingType> = [];
+let loadingSum:number=0;
+let loading:any;
+const showLoading = (message)=>{
+    loading = showLoadingToast({
+        message: message || '加载中...',
+        duration: 0,
+        forbidClick:true
+    })
+}
+  
+const hideLoading = ()=>{
+    loading.clear()
+}
 const cancelToken = axios.CancelToken;
 const removePending = (config:AxiosRequestConfig)=>{
     for(let p in pending){
@@ -47,13 +60,27 @@ class httpRequest {
             config.cancelToken = new cancelToken((c:any)=>{
                 pending.push({url:config.url,method:config.method,params:config.params,data:config.data,cancel:c})
             })
+
+            const {method,params,data} = config;
+            let mts = {'get':params,'post':data};
+            let loadingQuerys = {loading:mts[method]['loading'],loadMsg:mts[method]['loadMsg']};
+            delete mts[method]['loading']
+            delete mts[method]['loadMsg']
+            loadingSum++;
+            if(loadingSum == 1 && loadingQuerys.loading){
+                showLoading(loadingQuerys.loadingMsg);
+            }
             return config
         },(error:any) => {
             return Promise.reject(error)
         })
 
         instance.interceptors.response.use((resp:any) => {
-            const rCode = resp.data.code || resp.data.code == 0 ? resp.data.code : resp.data.errCode
+            const rCode = resp.data.code || resp.data.code == 0 ? resp.data.code : resp.data.errCode;
+            loadingSum--;
+            if(loadingSum == 0){
+                hideLoading();
+            }
             if(rCode === 302){
                 location.href = resp.data.msg;
             }else if(rCode === 0){
@@ -63,6 +90,10 @@ class httpRequest {
                 return Promise.reject(resp.data);
             } 
         },(error:any) => {
+            loadingSum--;
+            if(loadingSum == 0){
+                hideLoading();
+            }
             showToast (error.toString());
             return Promise.reject(error);
         })

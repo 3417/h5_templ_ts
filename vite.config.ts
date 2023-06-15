@@ -5,7 +5,7 @@ import { fileURLToPath, URL } from 'node:url';
 import DefineOptions from 'unplugin-vue-define-options/vite';
 import Components from 'unplugin-vue-components/vite';
 import { VantResolver } from 'unplugin-vue-components/resolvers';
-import postcsspxtoviewport from 'postcss-px-to-viewport'
+import postcsspxtoviewport8plugin from 'postcss-px-to-viewport-8-plugin'
 import AutoImport from 'unplugin-auto-import/vite'
 // https://vitejs.dev/config/
 
@@ -79,14 +79,11 @@ export default ({ mode }) => {
       },
       postcss: {
         plugins: [
-          postcsspxtoviewport({
-            viewportWidth: 375, // UI设计稿的宽度
+          postcsspxtoviewport8plugin({
+            viewportWidth: (file)=>{
+              return 375;
+            }, // UI设计稿的宽度
             exclude: [/^(?!.*node_modules\/vant)/,/node_modules\/vant/i], // 设置忽略文件，用正则做目录名匹配
-            ...pxToViewportConfig
-          }),
-          postcsspxtoviewport({
-            viewportWidth: 375, // UI设计稿的宽度
-            exclude: [],
             ...pxToViewportConfig
           })
         ]
@@ -104,6 +101,10 @@ export default ({ mode }) => {
       },
       rollupOptions:{
         output:{
+          manualChunks:{
+            // 配置打包的chunkFileName
+            //'name':['xxxx/xxx/xxx','xxx/xxx/xxxx'] 
+          },
           chunkFileNames:'js/[name]-[hash].js',
           entryFileNames:'js/[name]-[hash].js',
           assetFileNames:'[ext]/[name]-[hash].[ext]'

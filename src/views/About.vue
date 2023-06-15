@@ -1,11 +1,12 @@
 <template>
-<div class="about">
-        About
+<div class="">
+    About
 </div>
 </template>
-<script setup lang="ts">
+<script setup>
 import {reactive,ref,onMounted} from "vue"
+
 </script>
 <style lang="scss" scoped>
 
-</style> 
+</style>
