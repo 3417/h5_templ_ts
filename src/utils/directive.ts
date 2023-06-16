@@ -248,7 +248,7 @@ const longpress = {
   }
 }
 
-// 倒计时 v-countdown[30]="{fn:<fn>,msg}",组件中的fn方法需要使用promise返回值
+// 倒计时 v-countdown:[30]="{fn:<fn>,msg}",组件中的fn方法需要使用promise返回值
 const countdown = {
   mounted(el, binding, vnode) {
     console.log(el, binding, vnode);
@@ -260,13 +260,13 @@ const countdown = {
       flag = true;
       let i = binding.arg || 60;  //获取倒计时 时间
       el.innerHTML = i + 's';
-      vnode.elm.style = 'filter:grayscale(1);pointer-events:none';
+      vnode.el.style = 'filter:grayscale(1);pointer-events:none';
       let t = setInterval(() => {
         if (i < 1) {
           clearInterval(t);
           flag = false;
           el.innerHTML = binding.value.msg;
-          vnode.elm.style = 'filter:grayscale(0);pointer-events:auto';
+          vnode.el.style = 'filter:grayscale(0);pointer-events:auto';
           return;
         };
         i--;
