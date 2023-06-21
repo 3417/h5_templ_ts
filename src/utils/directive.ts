@@ -112,15 +112,16 @@ const throttle = {
 // h5下拉选择项 v-clickOutSide
 const clickOutSide = {
   mounted(el,binding,vnode){
+    console.log(binding);
     // 默认要传递binding.value为isShow
     function clickHandler(e){
       if(el.contains(e.target)){
         return false;
       }else{
         if (binding.value) {
-          vnode.context[binding.value] ? vnode.context[binding.value] = false : ''
+          binding.instance[binding.value] ? binding.instance[binding.value] = false : ''
         } else {
-          vnode.context.isShow ? vnode.context.isShow = false : ''
+          binding.instance.isShow ? binding.instance.isShow =false :''
         }
       }
     }
@@ -248,7 +249,7 @@ const longpress = {
   }
 }
 
-// 倒计时 v-countdown:[30]="{fn:<fn>,msg}",组件中的fn方法需要使用promise返回值
+// 倒计时 v-countdown:[30]="{fn:<fn>,msg}",组件中的fn方法需要使用promise返回值(fn 需要使用节流防抖)
 const countdown = {
   mounted(el, binding, vnode) {
     console.log(el, binding, vnode);
