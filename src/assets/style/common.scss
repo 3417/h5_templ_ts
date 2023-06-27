@@ -10,3 +10,68 @@ body{
 .zPopup{
 	z-index: 9999!important;
 }
+
+
+
+/**
+	一些动画效果
+*/ 
+
+
+@keyframes crossed {
+	0% {
+		top: -200%;
+		left: -100%;
+	}
+
+	100% {
+		top: -50px;
+		left: 100%;
+	}
+}
+
+@keyframes heartbeat {
+	from {
+		transform: translate(-50%, -50%) scale(1);
+		animation-timing-function: ease-out;
+	}
+
+	10% {
+		transform: translate(-50%, -50%) scale(0.91);
+		animation-timing-function: ease-in;
+	}
+
+	17% {
+		transform: translate(-50%, -50%) scale(0.98);
+		animation-timing-function: ease-out;
+	}
+
+	33% {
+		transform: translate(-50%, -50%) scale(0.87);
+		animation-timing-function: ease-in;
+	}
+
+	45% {
+		transform: translate(-50%, -50%) scale(1);
+		animation-timing-function: ease-out;
+	}
+}
+
+.highlight_box {
+	position: relative;
+	overflow: hidden;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: -200%;
+		left: -100%;
+		z-index: 20;
+		display: block;
+		width: 20%;
+		height: 400%;
+		background: linear-gradient(to left, rgba(255, 255, 255, .05) 20%, rgba(255, 255, 255, .6) 65%, rgba(255, 255, 255, .05) 100%);
+		transform: rotate(32deg);
+		animation: crossed 1.8s ease-in .12s infinite;
+	}
+}

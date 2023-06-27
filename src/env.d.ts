@@ -24,3 +24,10 @@ declare interface Window{
   eruda:any,
   WeixinJSBridge:any
 }
+
+// 全局interface
+interface pageProps<T>{
+  pageNum:number,
+  pageSize:number,
+  filters?:T
+}

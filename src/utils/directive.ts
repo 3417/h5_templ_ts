@@ -134,7 +134,7 @@ const clickOutSide = {
   }
 }
 
-// 使用h5-drag 携带[:animation]是否展示动画效果->h5drag:animation
+// 使用h5-drag 携带:[animation]是否展示动画效果->h5drag:animation
 const h5drag = {
   mounted(el,binding,vnode){
     let isDrag = true,tempX = 0,x = 0,tempY = 0,y=0,endX = 0;

@@ -83,7 +83,7 @@ export default ({ mode }) => {
             viewportWidth: (file)=>{
               return 375;
             }, // UI设计稿的宽度
-            // exclude: [/^(?!.*node_modules\/vant)/,/node_modules\/vant/i], // 设置忽略文件，用正则做目录名匹配(该正则有问题)
+            // exclude: [/^(?!.*node_modules\/vant)/,/node_modules\/vant/i], // TODO:设置忽略文件，用正则做目录名匹配(该正则有问题)
             exclude: [/node_modules\/vant/], // 设置忽略文件
             ...pxToViewportConfig
           })

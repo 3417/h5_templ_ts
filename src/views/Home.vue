@@ -41,7 +41,7 @@ onMounted(() => {
   text-align: center;
   font-size: 10vw;
   p{
-    font-size:6vw;
+    font-size:24px;
   }
 }
 </style>

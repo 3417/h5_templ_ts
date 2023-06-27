@@ -3,12 +3,12 @@ const baseUrl = import.meta.env.VITE_APP_BASE_API;
 import {showToast,showLoadingToast} from 'vant';
 interface  pendingType {
     url:string;
-    params?:any;
-    data?:any;
+    params?:T;
+    data?:T;
     baseURL?:string;
     oConfig?:object;
     method?:Method;
-    cancel:any;
+    cancel:T;
 }
 let pending:Array<pendingType> = [];
 let loadingSum:number=0;
@@ -62,13 +62,14 @@ class httpRequest {
             })
 
             const {method,params,data} = config;
-            let mts = {'get':params,'post':data};
-            let loadingQuerys = {loading:mts[method]['loading'],loadMsg:mts[method]['loadMsg']};
-            delete mts[method]['loading']
-            delete mts[method]['loadMsg']
+            let mts = { 'get': params, 'post': data };
+            let getParams = mts[method] ? mts[method] : {}
+            let loadingQuerys = { loading: getParams?.['loading'], loadMsg: getParams?.['loadText'] };
+            getParams ? delete getParams['loading'] : '';
+            getParams ? delete getParams['loadText'] : ''
             loadingSum++;
             if(loadingSum == 1 && loadingQuerys.loading){
-                showLoading(loadingQuerys.loadingMsg);
+                showLoading(loadingQuerys.loadMsg);
             }
             return config
         },(error:any) => {
