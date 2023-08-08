@@ -7,6 +7,9 @@ import Components from 'unplugin-vue-components/vite';
 import { VantResolver } from 'unplugin-vue-components/resolvers';
 import postcsspxtoviewport8plugin from 'postcss-px-to-viewport-8-plugin'
 import AutoImport from 'unplugin-auto-import/vite'
+import { createHtmlPlugin } from 'vite-plugin-html'
+import externalGlobals from "rollup-plugin-external-globals";
+import uploadAlioss from './viteUploadoss.ts';
 // https://vitejs.dev/config/
 
 // 自动引入
@@ -48,7 +51,30 @@ export default ({ mode }) => {
         resolvers: [VantResolver()],
       }),
       DefineOptions(),
-      AutoImportPlugins
+      AutoImportPlugins,
+      createHtmlPlugin({
+        template: './index.html',
+        inject:{
+          data:{
+            title:"首页"
+          },
+          tags:[
+            {
+                injectTo: 'body',
+                tag: 'script',
+                attrs: {
+                  // 'https://g.xxx.cn/@app/static/react@17.0.2,react-dom@17.0.2,react-router-dom@6.3.0,immer@9.0.15,axios@0.27.2,js-cookie@3.0.1.min.js'
+                  src: 'https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js',  //自己配置相关库的CDN地址
+                }
+            }
+          ]
+        }
+      })
+      // new uploadAlioss({
+      //   env: ["production", "test"].includes(process.env.NODE_ENV),
+      //   vueConfigPath: path.join(__dirname, "vue.config.js"),
+      //   CdnTargetPath: "/sc/activity_source/test/"
+      // })
     ],
     base: env.VITE_PUBLIC_PATH,
     server: {
@@ -59,7 +85,7 @@ export default ({ mode }) => {
         '/api': {
           target: 'http://127.0.0.1:9527',
           changeOrigin: true,
-          rewrite: (path) => path.replace('/^\/api/', '')
+          rewrite: (path) => path.replace(/^\/api/, '')
         }
       }
     },
@@ -109,7 +135,14 @@ export default ({ mode }) => {
           chunkFileNames:'js/[name]-[hash].js',
           entryFileNames:'js/[name]-[hash].js',
           assetFileNames:'[ext]/[name]-[hash].[ext]'
-        }
+        },
+        external: ['axios'], //不打包的相关依赖
+        plugins: [
+          // 不打包依赖映射的对象
+          externalGlobals({
+            'axios': 'axios',
+          })
+        ]
       }
     }
   })
