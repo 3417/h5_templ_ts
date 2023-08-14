@@ -27,12 +27,10 @@
  * tip:
  * 1.各组件按照vue的$emit方法调用onSuccess，onCancel方法 
  * 2.可根据不用的业务需求传入自定义的参数判断执行不用的逻辑
- * 3.如需要要在此组件中再次调用组建需要使用setTimeout异步方法调用
+ * 3.如需要要在此组件中再次调用组建需要使用setTimeout异步方法调用(vue3版本无效)
  * */
-import { createVNode, render} from 'vue';
+import { createVNode, render,createApp} from 'vue';
 import popupCpm from './popupcpm.vue';
-let container = document.body;
-const componentConstructor = popupCpm;
 interface vshowProps {
     componenTag:number|string,
     maskBgColor?:string,
@@ -45,13 +43,15 @@ interface vshowProps {
 let $ele,$eles=[];
 const destory = () => {
     $ele.popupShow.value = false;
+    let _$id = $ele.id;
     setTimeout(() => {
+        console.log('重新复制=>',$ele,$eles);
         $ele = null;
         if($eles.length > 1){
             $ele = $eles[$eles.length - 2];
-            $eles = $eles.splice($eles.length-1,1);
-        }
-        render(null, container);
+            $eles = $eles.splice($ele,1);
+        }else $eles = [];
+        document.body.removeChild(document.getElementById(_$id));
     }, 280);
 }
 
@@ -60,21 +60,42 @@ const destoryAll = ()=>{
         v.popupShow = false;
         if($eles.length > 1){
             $ele = $eles[$eles.length - 2];
-            $eles = $eles.splice($eles.length-1,1);
+            $eles = $eles.splice($ele,1);
         }
+        document.body.removeChild(document.getElementById(v.id));
     })
     $eles = [];
     $ele = null;
-    render(null, container);
 }
 
 const Mask = (opts) => {
-    const app:any = createVNode(popupCpm, {
-        ...opts
-    });
-    render(app, container);
-    $ele = app.component.exposed;
+    const id = 'modal_'+new Date().getTime();
+    const container = document.createElement('div');
+    container.id = id;
+    document.body.appendChild(container);
+    const app = createVNode(popupCpm, {...opts});
+    render(app,container);
+    $ele = {...app.component.exposed,id};
     $eles.push($ele);
+    const {_hub,props} = app.component;
+    _hub['onCancel'] = function(v){
+        const {isCanDestory,onCancel} = props;
+        if(isCanDestory){
+            onCancel(v,destory)
+            return;
+        }
+        onCancel(v);
+        destory();
+    }
+    _hub['onSuccess'] = function(v){
+        const {isSucDestory,onSuccess} = props;
+        if(isSucDestory){
+            onSuccess(v,destory)
+            return;
+        }
+        onSuccess(v);
+        destory();
+    }
 }
 const vshow3 = (opts:vshowProps) => {
     switch(typeof opts){
@@ -85,23 +106,7 @@ const vshow3 = (opts:vshowProps) => {
             Mask(opts);
             break;    
     }
-    return $ele.vshow3().then(_v=>{
-        console.warn("onSuccess=>",_v);
-        if(opts?.isSucDestory){
-            opts['onSuccess'](_v,destory);
-            return;
-        }
-        opts.onSuccess ? opts.onSuccess() : ''
-        destory();
-    }).catch(_r=>{
-        console.warn("onCancel=>",_r); 
-        if(opts?.isCanDestory){
-            opts['onCancel'](_v,destory);
-            return;
-        }
-        opts.onCancel ? opts.onCancel() : ''
-        destory();
-    })
+    return $ele.vshow3();
 }
 
 export default (app:any) => {

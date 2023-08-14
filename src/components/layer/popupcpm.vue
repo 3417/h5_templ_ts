@@ -1,44 +1,45 @@
 <template>
-  <div class="cpm-mask" :style="{ backgroundColor: maskBgColor }">
-    <div class="cpm_popup cpm_popup_in" :class="{ 'cpm_popup_out': !popupShow }" v-fixed>
-      <component :is="componenTag" v-bind="$attrs" :rData="rData" @onSuccess="onSuccess" @onCancel="onCancel" />
+  <div :class="`cpm-mask`" :style="{ backgroundColor: maskBgColor }">
+    <div class="cpm_popup cpm_popup_in" :class="{ cpm_popup_out: !popupShow }" v-fixed>
+      <component
+        :is="componenTag"
+        v-bind="$attrs"
+        :rData="rData"
+        @onSuccess="onSuccess"
+        @onCancel="onCancel"
+      />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 const popupShow = ref(false);
-const promise:any = ref({});
-const callback = reactive({
-  resolve:(v:any)=>{},
-  reject:(v:any)=>{}
-})
+const instance = getCurrentInstance();
 defineOptions({
-  name: "popupCpm"
-})
+  name: "popupCpm",
+});
 
 interface Props {
-  componenTag?:any,
-  maskBgColor?:string,
-  rData?:any,
-  isSucDestory?:boolean,
-  isCanDestory?:boolean,
-  onCancel?:Function,
-  onSuccess?:Function,
+  componenTag?: any;
+  maskBgColor?: string;
+  rData?: any;
+  isSucDestory?: boolean;
+  isCanDestory?: boolean;
+  onCancel?: Function;
+  onSuccess?: Function;
 }
-withDefaults(defineProps<Props>(),{
-  componenTag:{},
-  maskBgColor:"rgba(0,0,0,.85)",
-  rData:{},
-  isSucDestory:false,
-  isCanDestory:false,
-  onCancel: ()=>{},
-  onSuccess: ()=>{}
-})
+withDefaults(defineProps<Props>(), {
+  componenTag: {},
+  maskBgColor: "rgba(0,0,0,.85)",
+  rData: {},
+  isSucDestory: false,
+  isCanDestory: false,
+  onCancel: () => {},
+  onSuccess: () => {},
+});
 
 const vFixed = {
   mounted() {
-    let scrollTop =
-      document.body.scrollTop || document.documentElement.scrollTop;
+    let scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
     document.body.style.cssText +=
       "position:fixed;overflow:hidden;width:100%;top:-" + scrollTop + "px;";
   },
@@ -46,38 +47,37 @@ const vFixed = {
     let body = document.body;
     body.style.position = "";
     let top = body.style.top;
-    document.body.scrollTop = document.documentElement.scrollTop =
-      -parseInt(top);
+    document.body.scrollTop = document.documentElement.scrollTop = -parseInt(top);
     body.style.top = "";
     body.style.overflow = "initial";
-  }
-}
-const onCancel=(v:any)=>{
-  callback.reject(v);
-}
-const onSuccess=(v:any)=>{
-  callback.resolve(v);
-}
+  },
+};
+const onCancel = (v: any) => {
+  instance._hub['onCancel'](v);
+};
+const onSuccess = (v: any) => {
+  instance._hub['onSuccess'](v);
+};
 const vshow3 = () => {
   popupShow.value = true;
-  promise.value = new Promise((resolve:any,reject:any)=>{
-    callback.resolve = resolve;
-    callback.reject = reject;
-  })
-  return promise.value;
-}
+};
+
+onBeforeMount(()=>{
+  instance._hub = {
+    'onCancel':()=>{},
+    'onSuccess':()=>{},
+  }
+})
 
 defineExpose({
   vshow3,
   onSuccess,
   onCancel,
-  popupShow
-})
-
-
+  popupShow,
+});
 </script>
 <style lang="scss" scoped>
-.cpm-mask{
+[class^="cpm-mask"] {
   position: fixed;
   z-index: 99;
   right: 0;
@@ -94,11 +94,11 @@ defineExpose({
 }
 
 .cpm_popup_in {
-  animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: scale-in-center 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .cpm_popup_out {
-  animation: fade-out 0.18s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: fade-out 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 // 进入动画效果
