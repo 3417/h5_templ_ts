@@ -9,7 +9,7 @@ import postcsspxtoviewport8plugin from 'postcss-px-to-viewport-8-plugin'
 import AutoImport from 'unplugin-auto-import/vite'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import externalGlobals from "rollup-plugin-external-globals";
-import uploadAlioss from './viteUploadoss.ts';
+import path from 'path'
 // https://vitejs.dev/config/
 
 // 自动引入
@@ -69,12 +69,7 @@ export default ({ mode }) => {
             }
           ]
         }
-      })
-      // new uploadAlioss({
-      //   env: ["production", "test"].includes(process.env.NODE_ENV),
-      //   vueConfigPath: path.join(__dirname, "vue.config.js"),
-      //   CdnTargetPath: "/sc/activity_source/test/"
-      // })
+      }),
     ],
     base: env.VITE_PUBLIC_PATH,
     server: {
