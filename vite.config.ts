@@ -42,6 +42,20 @@ const pxToViewportConfig = {
   replace: true, // 是否转换后直接更换属性值
   landscape: false // 是否处理横屏情况
 }
+
+const cdn = {
+  css: [
+    'https://cdn.jsdelivr.net/npm/vant@4.6.5/lib/index.min.css'
+  ],
+  js: [
+    'https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.min.js',
+    'https://cdn.jsdelivr.net/npm/vue-demi@0.14.5/lib/index.iife.min.js',
+    'https://cdn.jsdelivr.net/npm/vue-router@4/dist/vue-router.global.min.js',
+    'https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js',
+    'https://cdn.jsdelivr.net/npm/vant@4.6.5/lib/vant.min.js',
+    'https://cdn.jsdelivr.net/npm/pinia@2.1.3/dist/pinia.iife.min.js'
+  ],
+}
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   return defineConfig({
@@ -52,22 +66,26 @@ export default ({ mode }) => {
       }),
       DefineOptions(),
       AutoImportPlugins,
+      {
+        ...externalGlobals({
+          vue: 'Vue',
+          'vue-demi':'VueDemi',
+          'vue-router': 'VueRouter',
+          pinia:'Pinia',
+          'axios':'axios',
+          'vant':'vant'
+        }),
+        enforce: 'post',
+        apply: 'build',
+      },
       createHtmlPlugin({
         template: './index.html',
         inject:{
           data:{
-            title:"首页"
-          },
-          tags:[
-            {
-                injectTo: 'body',
-                tag: 'script',
-                attrs: {
-                  // 'https://g.xxx.cn/@app/static/react@17.0.2,react-dom@17.0.2,react-router-dom@6.3.0,immer@9.0.15,axios@0.27.2,js-cookie@3.0.1.min.js'
-                  src: 'https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js',  //自己配置相关库的CDN地址
-                }
-            }
-          ]
+            title:"首页",
+            cdnCSS:true?cdn.css:[],
+            cdnJS:true?cdn.js:[],
+          }
         }
       }),
     ],
@@ -104,12 +122,21 @@ export default ({ mode }) => {
             viewportWidth: (file)=>{
               return 375;
             }, // UI设计稿的宽度
-            // exclude: [/^(?!.*node_modules\/vant)/,/node_modules\/vant/i], // TODO:设置忽略文件，用正则做目录名匹配(该正则有问题)
             exclude: [/node_modules\/vant/], // 设置忽略文件
             ...pxToViewportConfig
           })
         ]
       }
+    },
+    optimizeDeps: {
+      include: [
+          'vue',
+          'vue-demi',
+          'vue-router',
+          'pinia',
+          'vant',
+          'axios'
+      ],
     },
     build: {
       outDir: 'dist',
@@ -131,12 +158,13 @@ export default ({ mode }) => {
           entryFileNames:'js/[name]-[hash].js',
           assetFileNames:'[ext]/[name]-[hash].[ext]'
         },
-        external: ['axios'], //不打包的相关依赖
-        plugins: [
-          // 不打包依赖映射的对象
-          externalGlobals({
-            'axios': 'axios',
-          })
+        external:[
+          'vue',
+          'vue-demi',
+          'vue-router',
+          'pinia',
+          'vant',
+          'axios'
         ]
       }
     }
