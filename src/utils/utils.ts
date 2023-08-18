@@ -8,7 +8,7 @@ export const getImageUrl = (url:string):string=>{
 
 // 防抖（方法）
 const debounce = (fun, delay) =>{
-    return function (this:any,..._arg) {
+    return function (..._arg) {
         let that:any = this;
         let _args = _arg;
         clearTimeout(fun.id);
@@ -20,7 +20,7 @@ const debounce = (fun, delay) =>{
 
 // 节流(方法)
 const throttle = (fun,delay:number=200)=>{
-      return function(this:any,...args){
+      return function(...args){
           let that = this,now = +new Date();
           let deferTimer = null;
           if(last && now < last+delay){
