@@ -1,5 +1,8 @@
 // import vshow3 from "../components/layer/index";
-const provideCpms:any = {
+interface provideConfig {
+    // vshow3
+}
+const provideCpms:provideConfig = {
     // vshow3
 }
 /**

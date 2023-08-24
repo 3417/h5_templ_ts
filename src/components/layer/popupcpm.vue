@@ -13,7 +13,7 @@
 </template>
 <script lang="ts" setup>
 const popupShow = ref(false);
-const instance = getCurrentInstance();
+const instance = getCurrentInstance() as any;
 defineOptions({
   name: "popupCpm",
 });

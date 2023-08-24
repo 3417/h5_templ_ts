@@ -40,7 +40,7 @@ interface vshowProps {
     onSuccess?:Function,
 }
 
-let $ele,$eles=[];
+let $ele:unknown,$eles:any[] =[];
 const destory = () => {
     $ele.popupShow.value = false;
     let _$id = $ele.id;
