@@ -50,6 +50,7 @@ const destory = () => {
             $ele = $eles[$eles.length - 2];
             $eles = $eles.splice($ele,1);
         }else $eles = [];
+        render(null, document.getElementById(_$id));
         document.body.removeChild(document.getElementById(_$id));
     }, 280);
 }
@@ -61,6 +62,7 @@ const destoryAll = ()=>{
             $ele = $eles[$eles.length - 2];
             $eles = $eles.splice($ele,1);
         }
+        render(null, document.getElementById(_$id));
         document.body.removeChild(document.getElementById(v.id));
     })
     $eles = [];
