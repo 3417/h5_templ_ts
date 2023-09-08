@@ -62,7 +62,7 @@ const destoryAll = ()=>{
             $ele = $eles[$eles.length - 2];
             $eles = $eles.splice($ele,1);
         }
-        render(null, document.getElementById(_$id));
+        render(null, document.getElementById(v.id));
         document.body.removeChild(document.getElementById(v.id));
     })
     $eles = [];
