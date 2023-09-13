@@ -75,3 +75,19 @@ body{
 		animation: crossed 1.8s ease-in .12s infinite;
 	}
 }
+
+
+// 文字阴影描边效果
+.shadow_text{
+	--textColor:#FFF089;
+	--shadowColor:#026A6C;
+	color: var(--textColor);
+    text-shadow: 2px 0 0 var(--shadowColor), 
+	-2px 0 0 var(--shadowColor), 
+	0 2px 0 var(--shadowColor), 
+	0 -2px 0 var(--shadowColor), 
+	1px 1px 0 var(--shadowColor), 
+	-1px 1px 0 var(--shadowColor), 
+	1px -1px 0 var(--shadowColor), 
+	-1px -1px 0 var(--shadowColor);
+}

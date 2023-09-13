@@ -22,7 +22,7 @@ const showLoading = (message)=>{
 }
   
 const hideLoading = ()=>{
-    loading.clear()
+    if(loading) loading.close()
 }
 const cancelToken = axios.CancelToken;
 const removePending = (config:AxiosRequestConfig)=>{
