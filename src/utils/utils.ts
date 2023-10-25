@@ -108,3 +108,11 @@ export const decrypt = function(word){
     });
     return decrypted.toString(CryptoJS.enc.Utf8);
 }
+
+// 判断是否是在微信浏览器或者掌银APP中
+export const browserType = ()=>{
+    let userAgent = navigator.userAgent.toLowerCase();
+    if(window.AlipayJSBridge){return 'APP'}
+    else if(userAgent.indexOf('micromessenger') !== -1){return 'WX'}
+    else return 'BROWSER';
+}
