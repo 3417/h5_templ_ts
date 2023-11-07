@@ -95,7 +95,7 @@ class httpRequest {
             if(loadingSum == 0){
                 hideLoading();
             }
-            showToast (error.toString());
+            error.message === '操作太频繁，请稍后再试' ? '':showToast (error.toString());
             return Promise.reject(error);
         })
     }
