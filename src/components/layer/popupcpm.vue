@@ -18,16 +18,7 @@ defineOptions({
   name: "popupCpm",
 });
 
-interface Props {
-  componenTag?: any;
-  maskBgColor?: string;
-  rData?: any;
-  isSucDestory?: boolean;
-  isCanDestory?: boolean;
-  onCancel?: Function;
-  onSuccess?: Function;
-}
-withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<vshow3>(), {
   componenTag: {},
   maskBgColor: "rgba(0,0,0,.85)",
   rData: {},

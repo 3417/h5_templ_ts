@@ -9,7 +9,7 @@
  *    2.maskBgColor:蒙层背景色（已默认可不传）
  *    3.rData:相关数据信息
  *    4.onSuccess:成功回调
- *    5.onSuccess:关闭回调
+ *    5.onCancel:关闭回调
  *    6.isSucDestory/isCanDestory:是否需要手动销毁弹窗
  *      6.1<默认为false,如为true则onSuccess，onCancel回调函数中会回传一个callback函数，需要手动调用销毁>
  *       6.2<eg:onSuccess:(val,cb)=>{cb && cb()}>
@@ -31,14 +31,6 @@
  * */
 import { createVNode, render,createApp} from 'vue';
 import popupCpm from './popupcpm.vue';
-interface vshowProps {
-    componenTag:number|string,
-    maskBgColor?:string,
-    rData?:object|any,
-    isOwnDestory?:boolean,
-    onCancel?:Function,
-    onSuccess?:Function,
-}
 
 let $ele:unknown,$eles:any[] =[];
 const destory = () => {
@@ -98,7 +90,7 @@ const Mask = (opts) => {
         destory();
     }
 }
-const vshow3 = (opts:vshowProps) => {
+const vshow3 = (opts:vshow3) => {
     switch(typeof opts){
         case 'string':
             console.log('Oops... isString');
