@@ -18,6 +18,17 @@ defineOptions({
   name: "popupCpm",
 });
 
+// withDefaults  defineProps 定义的类型需要在当前文件中定义
+interface vshow3<T=any>{
+    componenTag:any|undefined;
+    maskBgColor?:string;
+    rData?:{[key:string]:T} | any;
+    isSucDestory?:boolean;
+    isCanDestory?:boolean;
+    onSuccess?:Function,
+    onCancel?:Function
+}
+
 withDefaults(defineProps<vshow3>(), {
   componenTag: {},
   maskBgColor: "rgba(0,0,0,.85)",
