@@ -46,6 +46,7 @@ const vFixed = {
       "position:fixed;overflow:hidden;width:100%;top:-" + scrollTop + "px;";
   },
   unmounted() {
+    if(document.querySelectorAll('[id^=modal]').length > 1){ return}  //todo：待验证
     let body = document.body;
     body.style.position = "";
     let top = body.style.top;

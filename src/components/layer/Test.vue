@@ -1,12 +1,13 @@
 <template>
     <div class="test">
-        {{ $attrs?.rData?.msg }}
+        {{ props.rData?.msg }}
         <button @click="emit('onSuccess','success')">Success</button>
     </div>
     <div class="close" @click="emit('onCancel','fail')">X</div>
 </template>
 <script setup lang="ts">
 const emit = defineEmits(["onCancel","onSuccess"]);
+const props = defineProps(['rData'])
 </script>
 <style lang="scss" scoped>
 .test {
