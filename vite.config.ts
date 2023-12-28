@@ -83,8 +83,8 @@ export default ({ mode }) => {
         inject:{
           data:{
             title:"首页",
-            cdnCSS:true?cdn.css:[],
-            cdnJS:true?cdn.js:[],
+            cdnCSS:cdn.css,
+            cdnJS:cdn.js,
           }
         }
       }),

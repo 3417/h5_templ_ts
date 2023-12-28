@@ -1,4 +1,4 @@
-declare interface vshow3<T=any>{
+declare interface tshow3<T=any>{
     componenTag:any|undefined;
     maskBgColor?:string;
     rData?:{[key:string]:T} | any;
@@ -7,3 +7,11 @@ declare interface vshow3<T=any>{
     onSuccess?:Function,
     onCancel?:Function
 }
+
+
+declare module 'vue' {
+  interface ComponentCustomProperties {
+        vshow3:tshow3
+  }
+}
+export {}

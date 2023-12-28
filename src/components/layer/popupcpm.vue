@@ -19,7 +19,7 @@ defineOptions({
 });
 
 // withDefaults  defineProps 定义的类型需要在当前文件中定义
-interface vshow3<T=any>{
+interface tshow3<T=any>{
     componenTag:any|undefined;
     maskBgColor?:string;
     rData?:{[key:string]:T} | any;
@@ -29,7 +29,7 @@ interface vshow3<T=any>{
     onCancel?:Function
 }
 
-withDefaults(defineProps<vshow3>(), {
+withDefaults(defineProps<tshow3>(), {
   componenTag: {},
   maskBgColor: "rgba(0,0,0,.85)",
   rData: {},
