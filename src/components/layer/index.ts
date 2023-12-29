@@ -1,9 +1,9 @@
 /**
  * 1.使用方法
- * vshow3(String/Object)  //预留了String类型，目前未使用
- * 传入的需要页面展示的数据放在rData对象中，componenTag为不同类型弹窗标识
+ * vshow3(Object)
+ * 传入的需要页面展示的数据放在rData对象中，componenTag为不同类型弹窗内容
  * 2.接受参数
- * 接受参数：String,Object
+ * 接受参数：Object
  * Object:
  *    1.componenTag:组件
  *    2.maskBgColor:蒙层背景色（已默认可不传）
@@ -12,7 +12,7 @@
  *    5.onCancel:关闭回调
  *    6.isSucDestory/isCanDestory:是否需要手动销毁弹窗
  *      6.1<默认为false,如为true则onSuccess，onCancel回调函数中会回传一个callback函数，需要手动调用销毁>
- *       6.2<eg:onSuccess:(val,cb)=>{cb && cb()}>
+ *      6.2<eg:onSuccess:(val,cb)=>{cb && cb()}>
  * 调用事例:
   * const {proxy} = getCurrentInstance();
    * proxy.vshow({
@@ -90,10 +90,11 @@ const Mask = (opts) => {
         destory();
     }
 }
-const vshow3 = (opts:vshow3) => {
+
+const vshow3 = (opts:tshow3) => {
     switch(typeof opts){
         case 'string':
-            console.log('Oops... isString');
+            throw new Error('传入参数错误，请传入对象') 
             break;
         case 'object':
             Mask(opts);
