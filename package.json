@@ -29,7 +29,7 @@
     "unplugin-vue-define-options": "^1.4.1",
     "vant": "4.8.1",
     "vite-plugin-html": "^3.2.0",
-    "vue": "^3.3.13",
+    "vue": "^3.4.0",
     "vue-router": "4"
   },
   "devDependencies": {

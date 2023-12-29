@@ -6,12 +6,11 @@
 <!-- main.ts -->
 const app = createApp(App);
 app.provide('$http',request);
-
 <!-- some xxx.vue -->
 const $http: any = inject("$http");
 $http.执行
 
-2. 通过proxy(this)方式去调用挂载到原型的属性或请求
+2. 通过proxy(this)方式去调用挂载到原型的属性或请求(建议使用第二种方法)
 ```
 
 ### .env文件配置
@@ -54,4 +53,9 @@ let scale = window.screen.width / <根据当前设计稿的宽度>  //计算缩�
 2. vue3.0可支持多个节点，不需要写在一个节点里面了
 3. 其他请参考相关文档
 
-### 注意 当前的模板需要使用node16(含)以上的版本
+### Vue3.4版本注意事项
+1. Vue3.3x版本中的方法警告  将在此版本中移除请注意适配
+
+## 注意 
+1. vite4 需要node16(含)以上的版本
+2. vite5 需要node20以上(含)的版本
