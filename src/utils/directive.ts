@@ -29,7 +29,7 @@ const eruda = {
             window.eruda && window.eruda.init();
           }
         };
-        script.src = '//cdn.bootcss.com/eruda/1.2.4/eruda.min.js';
+        script.src = 'https://cdn.staticfile.org/eruda/3.0.1/eruda.min.js';
         head.appendChild(script);
       }
     }
@@ -51,7 +51,7 @@ const clog = {
             window.VConsole && new window.VConsole();
           }
         };
-        script.src = '//unpkg.com/vconsole@latest/dist/vconsole.min.js';
+        script.src = 'https://libs.cdnjs.net/vConsole/3.15.1/vconsole.min.js';
         head.appendChild(script);
       }
     }
