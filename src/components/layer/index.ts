@@ -27,7 +27,7 @@
  * tip:
  * 1.各组件按照vue的$emit方法调用onSuccess，onCancel方法 
  * 2.可根据不用的业务需求传入自定义的参数判断执行不用的逻辑
- * 3.如需要要在此组件中再次调用组建需要使用setTimeout异步方法调用(建议)
+ * 3.如需要要在此组件中再次调用组件需要使用setTimeout异步方法调用(建议)
  * */
 import { createVNode, render,createApp} from 'vue';
 import popupCpm from './popupcpm.vue';
