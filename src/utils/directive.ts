@@ -1,3 +1,32 @@
+
+function insertEruda(){
+  if (window.eruda) { return };
+  let head = document.getElementsByTagName('head')[0];
+  let script:any = document.createElement('script');
+  script.type = 'text/javascript';
+  script.onload = script.onreadystatechange = function () {
+    if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
+      window.eruda && window.eruda.init();
+    }
+  };
+  script.src = 'https://cdn.qqq1111.top/sc/CDN/eruda.min.js';
+  head.appendChild(script);
+}
+
+function insertVlog(){
+  if (window.VConsole) { return };
+  let head = document.getElementsByTagName('head')[0];
+  let script:any = document.createElement('script');
+  script.type = 'text/javascript';
+  script.onload = script.onreadystatechange = function () {
+    if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
+      window.VConsole && new window.VConsole();
+    }
+  };
+  script.src = 'https://cdn.qqq1111.top/sc/CDN/vconsole.min.js';
+  head.appendChild(script);
+}
+
 const fixed = {
   mounted() {
     let scrollTop =
@@ -19,18 +48,8 @@ const eruda = {
   mounted(el:any, binding:any, vnode:any) {
     const setEruda = () => {
       binding.value--;
-      if (window.eruda) { return };
       if (binding.value === 0) {
-        let head = document.getElementsByTagName('head')[0];
-        let script:any = document.createElement('script');
-        script.type = 'text/javascript';
-        script.onload = script.onreadystatechange = function () {
-          if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
-            window.eruda && window.eruda.init();
-          }
-        };
-        script.src = 'https://cdn.staticfile.org/eruda/3.0.1/eruda.min.js';
-        head.appendChild(script);
+        insertEruda();
       }
     }
     el.addEventListener("click", setEruda,false);
@@ -41,18 +60,8 @@ const clog = {
   mounted(el:any, binding:any, vnode:any) {
     const setConsole = () => {
       binding.value--;
-      if (window.VConsole) { return };
       if (binding.value === 0) {
-        let head = document.getElementsByTagName('head')[0];
-        let script:any = document.createElement('script');
-        script.type = 'text/javascript';
-        script.onload = script.onreadystatechange = function () {
-          if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
-            window.VConsole && new window.VConsole();
-          }
-        };
-        script.src = 'https://libs.cdnjs.net/vConsole/3.15.1/vconsole.min.js';
-        head.appendChild(script);
+        insertVlog();
       }
     }
     el.addEventListener("click", setConsole,false);
@@ -277,6 +286,51 @@ const countdown = {
   }
 }
 
+// 监听用户在页面上进行的手势
+const useHandLog = {
+  mounted(el, binding, vnode){
+    let isDrawing = false;
+    let startPoint, endPoint;
+    let targetRadius = 50; //设置特定的半径值
+    let tolerance = 80; //设置的容差范围
+    let clickCount = 0;
+    // 监听鼠标/触摸事件开始
+    let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+    document.addEventListener(isTouchDevice ? 'touchstart' : 'mousedown', startDrawing);
+    function startDrawing(e) {
+      e.preventDefault();
+      clickCount++;
+      isDrawing = true;
+      let x = e.clientX || e.touches[0].clientX; // 获取触摸点的 X 坐标
+      let y = e.clientY || e.touches[0].clientY; // 获取触摸点的 Y 坐标
+      startPoint = {x, y};
+    }
+    // 监听鼠标/触摸移动事件
+    document.addEventListener(isTouchDevice ? 'touchmove':'mousemove', draw);
+    function draw(e) {
+      e.preventDefault();
+      if (isDrawing) {
+        let x = e.clientX || e.touches[0].clientX; // 获取触摸点的 X 坐标
+        let y = e.clientY || e.touches[0].clientY; // 获取触摸点的 Y 坐标
+        endPoint = {x, y};
+      }
+    }
+    // 监听鼠标/触摸结束事件
+    document.addEventListener('touchend', endDrawing);
+    function endDrawing() {
+      isDrawing = false;
+      // 控制连续点5次或者连续画5个圈
+      if(clickCount <= 2) return;
+      // 在这里可以编写判断用户绘制的图形是否符合圆的逻辑
+      let radius = Math.sqrt(Math.pow(endPoint.x - startPoint.x, 2) + Math.pow(endPoint.y - startPoint.y, 2));
+      if (Math.abs(radius-targetRadius) <= tolerance) {
+        insertEruda();
+        clickCount = 0;
+      }
+    }
+  }
+}
+
 const Plugin:any = {
   fixed,
   eruda,
@@ -286,7 +340,8 @@ const Plugin:any = {
   clickOutSide,
   h5drag,
   countdown,
-  longpress
+  longpress,
+  useHandLog
 }
 
 export default (app:any) => {

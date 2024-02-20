@@ -10,6 +10,8 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import externalGlobals from "rollup-plugin-external-globals";
 import path from 'path'
+import * as obfuscator from 'javascript-obfuscator';
+const ObfuscatorCode = obfuscator.default;
 // https://vitejs.dev/config/
 
 // 自动引入
@@ -88,6 +90,29 @@ export default ({ mode }) => {
           }
         }
       }),
+      {
+        name:'vite-obfuscated-code',
+        apply:'build',
+        renderChunk(code,chunk){
+            const obfuscateList = ['Home']; //需要代码混淆的名单
+            const whiteCode = obfuscateList.includes(chunk.name);
+            if(whiteCode){
+              let obfuscateResult = ObfuscatorCode.obfuscate(code,
+                {
+                    compact: false,
+                    controlFlowFlattening: true,
+                    controlFlowFlatteningThreshold: 1,
+                    numbersToExpressions: true,
+                    simplify: true,
+                    stringArrayShuffle: true,
+                    splitStrings: true,
+                    stringArrayThreshold: 1
+                }
+              )
+              return {code:obfuscateResult.getObfuscatedCode()};
+            }
+        }
+      }
     ],
     base: env.VITE_PUBLIC_PATH,
     server: {
