@@ -36,12 +36,12 @@ let $ele:unknown,$eles:any[] =[];
 const destory = () => {
     $ele.popupShow.value = false;
     let _$id = $ele.id;
+    $ele = null;
+    if($eles.length > 1){
+        $ele = $eles[$eles.length - 2];
+        $eles.splice($eles.length-1,1);
+    }else $eles = [];
     setTimeout(() => {
-        $ele = null;
-        if($eles.length > 1){
-            $ele = $eles[$eles.length - 2];
-            $eles = $eles.splice($ele,1);
-        }else $eles = [];
         render(null, document.getElementById(_$id));
         document.body.removeChild(document.getElementById(_$id));
     }, 280);
