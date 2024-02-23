@@ -322,6 +322,7 @@ const useHandLog = {
       // 控制连续点5次或者连续画5个圈
       if(clickCount <= 2) return;
       // 在这里可以编写判断用户绘制的图形是否符合圆的逻辑
+      if(!endPoint || !startPoint) return;
       let radius = Math.sqrt(Math.pow(endPoint.x - startPoint.x, 2) + Math.pow(endPoint.y - startPoint.y, 2));
       if (Math.abs(radius-targetRadius) <= tolerance) {
         insertEruda();

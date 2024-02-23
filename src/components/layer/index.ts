@@ -49,11 +49,7 @@ const destory = () => {
 
 const destoryAll = ()=>{
     $eles.forEach(v=>{
-        v.popupShow = false;
-        if($eles.length > 1){
-            $ele = $eles[$eles.length - 2];
-            $eles = $eles.splice($ele,1);
-        }
+        v.popupShow.value = false;
         render(null, document.getElementById(v.id));
         document.body.removeChild(document.getElementById(v.id));
     })

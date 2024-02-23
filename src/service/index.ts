@@ -79,7 +79,7 @@ class httpRequest {
         instance.interceptors.response.use((resp:any) => {
             const rCode = resp.data.code || resp.data.code == 0 ? resp.data.code : resp.data.errCode;
             loadingSum--;
-            if(loadingSum == 0){
+            if(loadingSum === 0){
                 hideLoading();
             }
             if(rCode === 302){
