@@ -1,19 +1,11 @@
 import axios,{AxiosRequestConfig, Method} from 'axios';
-const baseUrl = import.meta.env.VITE_APP_BASE_API;
 import {showToast,showLoadingToast} from 'vant';
-interface  pendingType {
-    url:string;
-    params?:T;
-    data?:T;
-    baseURL?:string;
-    oConfig?:object;
-    method?:Method;
-    cancel:T;
-}
-let pending:Array<pendingType> = [];
+const baseUrl = import.meta.env.VITE_APP_BASE_API;
+axios.defaults.baseURL = baseUrl;  //设置默认全局的请求url地址
+let pending:Map<string,{config:AxiosRequestConfig;cnacel:()=>void}> = new Map();
 let loadingSum:number=0;
 let loading:any;
-const showLoading = (message)=>{
+const showLoading = (message?:string)=>{
     loading = showLoadingToast({
         message: message || '加载中...',
         duration: 0,
@@ -22,25 +14,27 @@ const showLoading = (message)=>{
 }
   
 const hideLoading = ()=>{
-    if(loading) loading.close()
+    if(loading){loading.close()}
 }
 const cancelToken = axios.CancelToken;
+
+// 封装pending列表管理
+const generateKey=(config:AxiosRequestConfig):string=>{
+    return [config.url,config.method,JSON.stringify(config.params),JSON.stringify(config.data)].join('#');
+}
 const removePending = (config:AxiosRequestConfig)=>{
-    for(let p in pending){
-        const item:number = +p;
-        const list:pendingType = pending[p];
-        const isPend = list.url === config.url && list.method === config.method && JSON.stringify(list.params) === JSON.stringify(config.params)&& JSON.stringify(list.data) === JSON.stringify(config.data)
-        if(isPend){
-            list.cancel("操作太频繁，请稍后再试")
-            pending.splice(item,1);
-        }
+    const key = generateKey(config);
+    const item = pending.get(key);
+    if(item){
+        item.cancel('操作太频繁，请稍后再试');
+        pending.delete(key);
     }
 }
 // 封装axios请求
 class httpRequest {
     baseUrl: string
     constructor(baseUrl?: string) {
-        this.baseUrl = baseUrl || ''
+        this.baseUrl = baseUrl || '';
     }
     getInsideConfig(): object {
         let config = {
@@ -57,8 +51,9 @@ class httpRequest {
             // config.headers['RefererRedirectURL'] = location.href;
             // config.headers['RefererRedirect'] = '<Name>'  //业务需要代码
             removePending(config);
-            config.cancelToken = new cancelToken((c:any)=>{
-                pending.push({url:config.url,method:config.method,params:config.params,data:config.data,cancel:c})
+            config.cancelToken = new cancelToken((cancel:any)=>{
+                const key = generateKey(config);
+                pending.set(key,{cancel});
             })
 
             const {method,params,data} = config;
@@ -75,7 +70,6 @@ class httpRequest {
         },(error:any) => {
             return Promise.reject(error)
         })
-
         instance.interceptors.response.use((resp:any) => {
             const rCode = resp.data.code || resp.data.code == 0 ? resp.data.code : resp.data.errCode;
             loadingSum--;
