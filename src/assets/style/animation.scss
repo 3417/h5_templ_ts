@@ -37,7 +37,6 @@
 	}
 }
 
-
 // animation:pulse 1s ease-in-out infinite;
 @keyframes pulse {
     0% {
@@ -52,7 +51,7 @@
         transform: scaleX(1)
     }
 }
-
+// animation:bounceIn 1.6s linear infinite;
 @keyframes bounceIn {
     0%,20%,40%,60%,80%,to {
         -webkit-animation-timing-function: cubic-bezier(.215,.61,.355,1);

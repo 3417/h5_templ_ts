@@ -29,3 +29,26 @@ body{
 	1px -1px 0 var(--shadowColor), 
 	-1px -1px 0 var(--shadowColor);
 }
+
+// 相关cell样式
+.df_cell{
+	--hei:45px;
+	--pad:0 10px;
+	--borderColor:#e0e0dc;
+	height: var(--hei);
+	padding:var(--pad);
+	.df_warp{
+		display: flex;
+		align-items: center;
+		width: 100%;
+		height: inherit;
+		border-bottom:1px solid var(--borderColor);
+	}
+	.df_cell_title{
+		font-size: 15px;
+	}
+	.df_cell_content{
+		text-align: right;
+		flex:1;
+	}
+}
